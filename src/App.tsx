@@ -1619,8 +1619,8 @@ const BreathVisual = ({ user, dateStr, isActiveTab, theme }: { user: User | null
            </div>
         </div>
       </div>
-      <div className="relative flex-1 overflow-hidden">
-        <canvas ref={canvasRef} className="absolute inset-0 z-0 touch-none" />
+      <div className="relative w-full h-[60vh] min-h-[360px] overflow-hidden rounded-2xl">
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-0 touch-none" />
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 mix-blend-screen">
           <h2 className={`text-5xl md:text-7xl font-thin tracking-widest transition-all duration-500 ${theme === 'light' ? 'text-gray-900' : 'text-white'}`}>
              {instruction}
