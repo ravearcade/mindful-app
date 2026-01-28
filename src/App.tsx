@@ -1146,7 +1146,7 @@ useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
       // wait until the ref exists, then try again
-      rafWait = requestAnimationFrame(start);
+      rafWait = requestAnimationFrame(start);  
       return;
     }
 
@@ -1175,33 +1175,10 @@ useEffect(() => {
     ro.observe(canvas);
 
     window.addEventListener("resize", resize);
+
     
 
-    // ---- your existing animation loop should continue below ----
-    // make sure you use `cancelled` to stop the loop on cleanup
-
-    // IMPORTANT: in cleanup below, disconnect ro + remove listener
-
-    // attach cleanup
-    const cleanup = () => {
-      cancelled = true;
-      window.removeEventListener("resize", resize);
-      ro.disconnect();
-    };
-
-    // store cleanup on function object (simple trick)
-    (start as any).cleanup = cleanup;
-  };
-
-  start();
-
-  return () => {
-    cancelled = true;
-    cancelAnimationFrame(rafWait);
-    if ((start as any).cleanup) (start as any).cleanup();
-  };
-}, []);
-    let animationFrameId: number;
+        let animationFrameId: number;
     let startTime = Date.now();
     let frameCount = 0;
     
@@ -1639,12 +1616,34 @@ useEffect(() => {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
-    return () => {
-        canvas.removeEventListener('mousemove', handleMouseMove);
-        canvas.removeEventListener('mousedown', handleMouseDown);
-        cancelAnimationFrame(animationFrameId);
+    
+    // ---- your existing animation loop should continue below ----
+    // make sure you use `cancelled` to stop the loop on cleanup
+
+    // IMPORTANT: in cleanup below, disconnect ro + remove listener
+
+    // attach cleanup
+    const cleanup = () => {
+      cancelled = true;
+      window.removeEventListener("resize", resize);
+      ro.disconnect();
     };
+
+    // store cleanup on function object (simple trick)
+    (start as any).cleanup = cleanup;
+  };
+
+  start();
+
+  return () => {
+    cancelled = true;
+    cancelAnimationFrame(rafWait);
+    if ((start as any).cleanup) (start as any).cleanup();
+  };
+}, []);
+    
+    render();
+
   }, [active, selectedPatternId, pattern, isActiveTab, currentPalette, currentShape, currentBg, theme, currentSymmetry, particleCount, layer2Shape, layer3Shape, is3DEnabled]);
 
   // -- Render UI --
