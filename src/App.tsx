@@ -10,7 +10,10 @@ import {
 import type { User } from 'firebase/auth';
 
 import { getFirestore, collection, doc, setDoc, onSnapshot, query, orderBy, Timestamp, getDoc, updateDoc, increment, arrayUnion } from 'firebase/firestore';
-import { Palette, Shuffle, Sliders, Pause, Play, XCircle, VolumeX, Volume2, Box } from 'lucide-react'; 
+import {
+  Palette, Shuffle, Sliders, Pause, Play, XCircle, VolumeX, Volume2, Box,
+  Flower, Battery, Dumbbell, Pill, Coffee, Utensils, Phone, Video
+} from 'lucide-react';
 import { 
   BookOpen, 
   Wind, 
@@ -1679,7 +1682,7 @@ const VitalsView = ({ user, dateStr, onSave }: { user: any, dateStr: string, onS
 
   // --- SAFE ICON DEFINITIONS (Prevents "ReferenceError" if not imported at top of file) ---
   const BaseIcon = (props: any) => <Activity {...props} />;
-  const IconFlower = typeof Flower2 !== 'undefined' ? Flower2 : BaseIcon;
+  const IconFlower = typeof Flower !== 'undefined' ? Flower: BaseIcon;
   const IconBrain = typeof Brain !== 'undefined' ? Brain : BaseIcon;
   const IconBattery = typeof Battery !== 'undefined' ? Battery : BaseIcon;
   const IconDumbbell = typeof Dumbbell !== 'undefined' ? Dumbbell : BaseIcon;
