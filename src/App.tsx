@@ -1175,21 +1175,7 @@ useEffect(() => {
     ro.observe(canvas);
 
     window.addEventListener("resize", resize);
-    let raf = 0;
-
-const tick = () => {
-  if (cancelled) return;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "white";
-  ctx.beginPath();
-  ctx.arc(80, 80, 20, 0, Math.PI * 2);
-  ctx.fill();
-
-  raf = requestAnimationFrame(tick);
-};
-
-tick();
+    
 
     // ---- your existing animation loop should continue below ----
     // make sure you use `cancelled` to stop the loop on cleanup
