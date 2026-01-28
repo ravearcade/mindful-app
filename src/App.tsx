@@ -1641,8 +1641,7 @@ useEffect(() => {
     if ((start as any).cleanup) (start as any).cleanup();
   };
 }, []);
-    
-    render();
+  
 
   }, [active, selectedPatternId, pattern, isActiveTab, currentPalette, currentShape, currentBg, theme, currentSymmetry, particleCount, layer2Shape, layer3Shape, is3DEnabled]);
 
