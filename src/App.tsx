@@ -1138,11 +1138,83 @@ const BreathVisual = ({ user, dateStr, isActiveTab, theme }: { user: User | null
   useEffect(() => {
     if (!canvasRef.current) return;
     
+useEffect(() => {
+  let cancelled = false;
+  let rafWait = 0;
+
+  const start = () => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    if (!canvas) {
+      // wait until the ref exists, then try again
+      rafWait = requestAnimationFrame(start);
+      return;
+    }
+
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.max(1, Math.floor(rect.width));
+      const h = Math.max(1, Math.floor(rect.height));
+
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    resize();
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+
+    window.addEventListener("resize", resize);
+    let raf = 0;
+
+const tick = () => {
+  if (cancelled) return;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+  ctx.arc(80, 80, 20, 0, Math.PI * 2);
+  ctx.fill();
+
+  raf = requestAnimationFrame(tick);
+};
+
+tick();
+
+    // ---- your existing animation loop should continue below ----
+    // make sure you use `cancelled` to stop the loop on cleanup
+
+    // IMPORTANT: in cleanup below, disconnect ro + remove listener
+
+    // attach cleanup
+    const cleanup = () => {
+      cancelled = true;
+      window.removeEventListener("resize", resize);
+      ro.disconnect();
+    };
+
+    // store cleanup on function object (simple trick)
+    (start as any).cleanup = cleanup;
+  };
+
+  start();
+
+  return () => {
+    cancelled = true;
+    cancelAnimationFrame(rafWait);
+    if ((start as any).cleanup) (start as any).cleanup();
+  };
+}, []);
     let animationFrameId: number;
     let startTime = Date.now();
     let frameCount = 0;
