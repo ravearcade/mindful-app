@@ -1138,7 +1138,6 @@ const BreathVisual = ({ user, dateStr, isActiveTab, theme }: { user: User | null
   useEffect(() => {
     if (!canvasRef.current) return;
     
-useEffect(() => {
   let cancelled = false;
   let rafWait = 0;
 
